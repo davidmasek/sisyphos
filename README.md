@@ -1,6 +1,8 @@
 # Sisyphos
 
-Play at [sispyhos.optimisticotter.me](https://sispyhos.optimisticotter.me).
+Try it at [sispyhos.optimisticotter.me](https://sispyhos.optimisticotter.me).
+
+Play in your browser using touch on mobile, or keyboard and mouse on desktop.
 
 ## Build / Run
 
