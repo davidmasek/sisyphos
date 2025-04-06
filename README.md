@@ -1,6 +1,8 @@
 # Sisyphos
 
-Try it at [sispyhos.optimisticotter.me](https://sispyhos.optimisticotter.me).
+Game without meaning?
+
+Try it at [sisyphos.optimisticotter.me](https://sisyphos.optimisticotter.me).
 
 Play in your browser using touch on mobile, or keyboard and mouse on desktop.
 
