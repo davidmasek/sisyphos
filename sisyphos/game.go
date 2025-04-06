@@ -102,16 +102,6 @@ func (g *Game) Update() error {
 	if err := g.board.Update(g.input); err != nil {
 		return err
 	}
-	if gameOver(g.board) {
-		g.level += 1
-		g.restart()
-	}
-	if runtime.GOOS != "js" && inpututil.IsKeyJustReleased(ebiten.KeyQ) {
-		return ebiten.Termination
-	}
-	if inpututil.IsKeyJustReleased(ebiten.KeyR) {
-		g.restart()
-	}
 	for _, pos := range g.input.Clicks {
 		startSprite := g.spriteAt(pos.StartX, pos.StartY)
 		endSprite := g.spriteAt(pos.EndX, pos.EndY)
@@ -119,6 +109,16 @@ func (g *Game) Update() error {
 			g.moveSpriteToFront(endSprite)
 			endSprite.JustPressed()
 		}
+	}
+	if inpututil.IsKeyJustReleased(ebiten.KeyR) {
+		g.restart()
+	}
+	if gameOver(g.board) || inpututil.IsKeyJustReleased(ebiten.KeyU) {
+		g.level += 1
+		g.restart()
+	}
+	if runtime.GOOS != "js" && inpututil.IsKeyJustReleased(ebiten.KeyQ) {
+		return ebiten.Termination
 	}
 	return nil
 }

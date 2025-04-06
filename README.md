@@ -1,17 +1,37 @@
 # Sisyphos
 
+Play at [sispyhos.optimisticotter.me](https://sispyhos.optimisticotter.me).
 
+## Build / Run
 
+### native
+
+```sh
+go run .
+```
+
+### wasmserve
+```sh
+# http://localhost:8080
+go run github.com/hajimehoshi/wasmserve@latest .
+```
+
+### build + python server
+
+```sh
+env GOOS=js GOARCH=wasm go build -o sisyphos.wasm sisyphos.optimisticotter.me
+python3 -m http.server
+```
 
 ## License
 
-
+Licensed under MIT License, see [LICENSE.txt](LICENSE.txt). Relies on other work, which might be licensed differently - see below.
 
 ### Ebiten
 
-Based on the 2028 Ebiten example game from https://github.com/hajimehoshi/ebiten.
+Uses Ebiten game engine and Ebiten examples from https://github.com/hajimehoshi/ebiten.
 
-The following is the license notice for that example, not for this project:
+Ebiten license:
 ```
 // Copyright 2016 The Ebiten Authors
 //
