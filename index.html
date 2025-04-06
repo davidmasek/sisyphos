@@ -1,8 +1,54 @@
 <!DOCTYPE html>
-<script src="wasm_exec.js"></script>
-<script>
-const go = new Go();
-WebAssembly.instantiateStreaming(fetch("sisyphos.wasm"), go.importObject).then(result => {
-    go.run(result.instance);
-});
-</script>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sisyphos</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .iframe-container {
+      flex: 1;
+      border: none;
+    }
+
+    footer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0.75rem;
+      background-color: black;
+    }
+
+    .gh-link img {
+      /* height: 2rem;
+      width: auto; */
+    }
+  </style>
+</head>
+<body>
+  <iframe 
+    class="iframe-container"
+    src="game.html"
+    id="game-iframe"
+    allowfullscreen
+  ></iframe>
+
+  <footer>
+    <a class="gh-link" href="https://github.com/davidmasek/sisyphos" target="_blank" aria-label="GitHub">
+        <img
+        src="github-mark-white.svg"
+        alt="GitHub"
+        height="49"
+        width="48" />
+    </a>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<style>
+  body,
+  html,
+  main {
+    height: 100%;
+    color: white;
+    background-color: black;
+  }
+
+  main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+</style>
+<main>
+  <h1>Loading...</h1>
+</main>
+<script src="wasm_exec.js"></script>
+<script>
+  const go = new Go();
+  WebAssembly.instantiateStreaming(fetch("sisyphos.wasm"), go.importObject).then(result => {
+    document
+      .querySelector('main')
+      .remove();
+    go.run(result.instance);
+  });
+</script>
