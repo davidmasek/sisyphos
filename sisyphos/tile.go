@@ -1,34 +1,16 @@
 package sisyphos
 
 import (
-	"bytes"
-	"embed"
 	"errors"
-	"image"
-	"image/color"
 	"log"
 	"math/rand/v2"
 
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/examples/resources/fonts"
-	"github.com/hajimehoshi/ebiten/v2/text/v2"
 )
-
-var (
-	mplusFaceSource *text.GoTextFaceSource
-)
-
-func init() {
-	s, err := text.NewGoTextFaceSource(bytes.NewReader(fonts.MPlus1pRegular_ttf))
-	if err != nil {
-		log.Fatal(err)
-	}
-	mplusFaceSource = s
-}
 
 // TileData represents a tile information like a value and a position.
 type TileData struct {
-	value Sprite
+	value SpriteType
 	x     int
 	y     int
 }
@@ -60,18 +42,18 @@ func (t *Tile) NextPos() (int, int) {
 
 // Value returns the tile's current value.
 // Value is used only at testing so far.
-func (t *Tile) Value() Sprite {
+func (t *Tile) Value() SpriteType {
 	return t.current.value
 }
 
 // NextValue returns the tile's current value.
 // NextValue is used only at testing so far.
-func (t *Tile) NextValue() Sprite {
+func (t *Tile) NextValue() SpriteType {
 	return t.next.value
 }
 
 // NewTile creates a new Tile object.
-func NewTile(value Sprite, x, y int) *Tile {
+func NewTile(value SpriteType, x, y int) *Tile {
 	return &Tile{
 		current: TileData{
 			value: value,
@@ -111,31 +93,7 @@ func tileAt(tiles map[*Tile]struct{}, x, y int) *Tile {
 	return result
 }
 
-func currentOrNextTileAt(tiles map[*Tile]struct{}, x, y int) *Tile {
-	var result *Tile
-	for t := range tiles {
-		if 0 < t.movingCount {
-			if t.next.x != x || t.next.y != y || t.next.value == 0 {
-				continue
-			}
-		} else {
-			if t.current.x != x || t.current.y != y {
-				continue
-			}
-		}
-		if result != nil {
-			panic("not reach")
-		}
-		result = t
-	}
-	return result
-}
-
-const (
-	// controls movement speed
-	maxMovingCount  = 5
-	maxPoppingCount = 6
-)
+const ()
 
 // MoveTiles moves tiles in the given tiles map if possible.
 // MoveTiles returns true if there are tiles that are to move, otherwise false.
@@ -186,7 +144,7 @@ func MoveTiles(tiles map[*Tile]struct{}, size int, dir Dir) bool {
 	return false
 }
 
-func addRandomTile(tiles map[*Tile]struct{}, size int, sprite Sprite) error {
+func addRandomTile(tiles map[*Tile]struct{}, size int, sprite SpriteType) error {
 	cells := make([]bool, size*size)
 	for t := range tiles {
 		if t.IsMoving() {
@@ -241,50 +199,6 @@ func meanF(a, b float64, rate float64) float64 {
 	return a*(1-rate) + b*rate
 }
 
-const (
-	tileSize   = 60
-	tileMargin = 4
-)
-
-var (
-	tileImage     = ebiten.NewImage(tileSize, tileSize)
-	playerImage   = ebiten.NewImage(tileSize, tileSize)
-	boulderImage  = ebiten.NewImage(tileSize, tileSize)
-	mountainImage = ebiten.NewImage(tileSize, tileSize)
-	targetImage   = ebiten.NewImage(tileSize, tileSize)
-)
-
-//go:embed assets/*
-var assetsFolder embed.FS
-
-func loadImage(path string, target *ebiten.Image) {
-	imgByte, err := assetsFolder.ReadFile(path)
-	if err != nil {
-		panic(err)
-	}
-	img, _, err := image.Decode(bytes.NewReader(imgByte))
-	if err != nil {
-		panic(err)
-	}
-	bounds := img.Bounds()
-	w, h := bounds.Dx(), bounds.Dy()
-	op := &ebiten.DrawImageOptions{}
-	op.GeoM.Scale(float64(tileSize)/float64(w), float64(tileSize)/float64(h))
-
-	// Draw the original decoded image onto 'resized'
-	src := ebiten.NewImageFromImage(img)
-	target.DrawImage(src, op)
-}
-
-func init() {
-	tileImage.Fill(color.White)
-
-	loadImage("assets/stickman.png", playerImage)
-	loadImage("assets/boulder.png", boulderImage)
-	loadImage("assets/mountain.png", mountainImage)
-	loadImage("assets/vase.png", targetImage)
-}
-
 // Draw draws the current tile to the given boardImage.
 func (t *Tile) Draw(boardImage *ebiten.Image) {
 	i, j := t.current.x, t.current.y
@@ -328,7 +242,7 @@ func (t *Tile) Draw(boardImage *ebiten.Image) {
 	boardImage.DrawImage(tileSprite(v), op)
 }
 
-func tileSprite(value Sprite) *ebiten.Image {
+func tileSprite(value SpriteType) *ebiten.Image {
 	switch value {
 	case PlayerSprite:
 		return playerImage

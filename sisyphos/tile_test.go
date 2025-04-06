@@ -7,7 +7,7 @@ import (
 	"sisyphos.optimisticotter.me/sisyphos"
 )
 
-func cellsToTiles(cells []sisyphos.Sprite, size int) map[*sisyphos.Tile]struct{} {
+func cellsToTiles(cells []sisyphos.SpriteType, size int) map[*sisyphos.Tile]struct{} {
 	tiles := map[*sisyphos.Tile]struct{}{}
 	for j := 0; j < size; j++ {
 		for i := 0; i < size; i++ {
@@ -22,9 +22,9 @@ func cellsToTiles(cells []sisyphos.Sprite, size int) map[*sisyphos.Tile]struct{}
 	return tiles
 }
 
-func tilesToCells(tiles map[*sisyphos.Tile]struct{}, size int) ([]sisyphos.Sprite, []sisyphos.Sprite) {
-	cells := make([]sisyphos.Sprite, size*size)
-	nextCells := make([]sisyphos.Sprite, size*size)
+func tilesToCells(tiles map[*sisyphos.Tile]struct{}, size int) ([]sisyphos.SpriteType, []sisyphos.SpriteType) {
+	cells := make([]sisyphos.SpriteType, size*size)
+	nextCells := make([]sisyphos.SpriteType, size*size)
 	for t := range tiles {
 		x, y := t.Pos()
 		cells[x+y*size] = t.Value()
@@ -45,18 +45,18 @@ func TestMoveTiles(t *testing.T) {
 	const size = 4
 	testCases := []struct {
 		Dir   sisyphos.Dir
-		Input []sisyphos.Sprite
-		Want  []sisyphos.Sprite
+		Input []sisyphos.SpriteType
+		Want  []sisyphos.SpriteType
 	}{
 		{
 			Dir: sisyphos.DirUp,
-			Input: []sisyphos.Sprite{
+			Input: []sisyphos.SpriteType{
 				sisyphos.EmptySprite, sisyphos.EmptySprite, sisyphos.EmptySprite, sisyphos.EmptySprite,
 				sisyphos.EmptySprite, sisyphos.EmptySprite, sisyphos.EmptySprite, sisyphos.EmptySprite,
 				sisyphos.EmptySprite, sisyphos.EmptySprite, sisyphos.EmptySprite, sisyphos.EmptySprite,
 				sisyphos.EmptySprite, sisyphos.EmptySprite, sisyphos.EmptySprite, sisyphos.EmptySprite,
 			},
-			Want: []sisyphos.Sprite{
+			Want: []sisyphos.SpriteType{
 				sisyphos.EmptySprite, sisyphos.EmptySprite, sisyphos.EmptySprite, sisyphos.EmptySprite,
 				sisyphos.EmptySprite, sisyphos.EmptySprite, sisyphos.EmptySprite, sisyphos.EmptySprite,
 				sisyphos.EmptySprite, sisyphos.EmptySprite, sisyphos.EmptySprite, sisyphos.EmptySprite,

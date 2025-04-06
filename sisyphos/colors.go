@@ -10,7 +10,7 @@ var (
 	frameColor      = color.RGBA{0xbb, 0xad, 0xa0, 0xff}
 )
 
-func tileBackgroundColor(value Sprite) color.Color {
+func tileBackgroundColor(value SpriteType) color.Color {
 	switch value {
 	case EmptySprite:
 		return color.NRGBA{0xee, 0xe4, 0xda, 0x59}

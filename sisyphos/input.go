@@ -62,6 +62,11 @@ func (d Dir) Vector() (x, y int) {
 	panic("not reach")
 }
 
+type Click struct {
+	StartX, StartY int
+	EndX, EndY     int
+}
+
 // Input represents the current key states.
 type Input struct {
 	mouseState    mouseState
@@ -77,6 +82,8 @@ type Input struct {
 	touchLastPosX int
 	touchLastPosY int
 	touchDir      Dir
+
+	Clicks []Click
 }
 
 // NewInput generates a new Input object.
@@ -92,7 +99,7 @@ func abs(x int) int {
 }
 
 func vecToDir(dx, dy int) (Dir, bool) {
-	if abs(dx) < 4 && abs(dy) < 4 {
+	if abs(dx) < MinDragDistance && abs(dy) < MinDragDistance {
 		return 0, false
 	}
 	if abs(dx) < abs(dy) {
@@ -109,6 +116,9 @@ func vecToDir(dx, dy int) (Dir, bool) {
 
 // Update updates the current input states.
 func (i *Input) Update() {
+	// clear values but keep the memory
+	i.Clicks = i.Clicks[:0]
+
 	switch i.mouseState {
 	case mouseStateNone:
 		if ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) {
@@ -120,6 +130,7 @@ func (i *Input) Update() {
 	case mouseStatePressing:
 		if !ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) {
 			x, y := ebiten.CursorPosition()
+			i.Clicks = append(i.Clicks, Click{i.mouseInitPosX, i.mouseInitPosY, x, y})
 			dx := x - i.mouseInitPosX
 			dy := y - i.mouseInitPosY
 			d, ok := vecToDir(dx, dy)
@@ -161,6 +172,7 @@ func (i *Input) Update() {
 			break
 		}
 		if len(i.touches) == 0 {
+			i.Clicks = append(i.Clicks, Click{i.mouseInitPosX, i.mouseInitPosY, i.touchLastPosX, i.touchLastPosY})
 			dx := i.touchLastPosX - i.touchInitPosX
 			dy := i.touchLastPosY - i.touchInitPosY
 			d, ok := vecToDir(dx, dy)

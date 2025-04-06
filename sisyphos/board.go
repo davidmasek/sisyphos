@@ -2,6 +2,7 @@ package sisyphos
 
 import (
 	"errors"
+	"log"
 
 	"github.com/hajimehoshi/ebiten/v2"
 )
@@ -19,6 +20,7 @@ type Board struct {
 
 // NewBoard generates a new Board with giving a size.
 func NewBoard(size int, blocks int) (*Board, error) {
+	log.Println("creating board of size", size)
 	b := &Board{
 		size:  size,
 		tiles: map[*Tile]struct{}{},
